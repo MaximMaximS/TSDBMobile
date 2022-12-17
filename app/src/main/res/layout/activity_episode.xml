@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EpisodeActivity">
+
+    <TextView
+        android:id="@+id/titleLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/episode_title"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/titleTextView" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/titleLabelTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/premiereLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/premiere"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/titleLabelTextView"
+        app:layout_constraintTop_toTopOf="@id/premiereTextView" />
+
+    <TextView
+        android:id="@+id/premiereTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/titleTextView"
+        app:layout_constraintStart_toEndOf="@id/premiereLabelTextView"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+    <TextView
+        android:id="@+id/directedByLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/direction"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/premiereLabelTextView"
+        app:layout_constraintTop_toTopOf="@id/directedByTextView" />
+
+    <TextView
+        android:id="@+id/directedByTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/premiereTextView"
+        app:layout_constraintStart_toEndOf="@id/directedByLabelTextView"
+        app:layout_constraintTop_toBottomOf="@id/premiereTextView" />
+
+    <TextView
+        android:id="@+id/screenplayLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/screenplay"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/directedByLabelTextView"
+        app:layout_constraintTop_toTopOf="@id/screenplayTextView" />
+
+    <TextView
+        android:id="@+id/screenplayTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/directedByTextView"
+        app:layout_constraintStart_toEndOf="@id/screenplayLabelTextView"
+        app:layout_constraintTop_toBottomOf="@id/directedByTextView" />
+
+    <TextView
+        android:id="@+id/watchedLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/watched"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/watchedSwitch"
+        app:layout_constraintStart_toStartOf="@+id/screenplayLabelTextView"
+        app:layout_constraintTop_toTopOf="@id/watchedSwitch" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/watchedSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:checked="false"
+        android:enabled="false"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/watchedLabelTextView"
+        app:layout_constraintTop_toBottomOf="@id/screenplayTextView" />
+
+    <Button
+        android:id="@+id/detailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_details"
+        app:layout_constraintBottom_toBottomOf="@+id/watchedSwitch"
+        app:layout_constraintEnd_toEndOf="@+id/screenplayTextView"
+        app:layout_constraintTop_toTopOf="@+id/watchedSwitch"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/prevButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/previous"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/episodeIdTextView" />
+
+    <TextView
+        android:id="@+id/episodeIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/prevButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/prevButton"
+        tools:text="XXX" />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/next"
+        app:layout_constraintBottom_toBottomOf="@+id/prevButton"
+        app:layout_constraintStart_toEndOf="@id/episodeIdTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

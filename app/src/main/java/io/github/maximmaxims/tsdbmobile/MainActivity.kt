@@ -54,4 +54,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
+
+    fun openSearch(view: View) {
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
+    }
 }

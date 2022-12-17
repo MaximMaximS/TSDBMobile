@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextUsername"
+        android:id="@+id/usernameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
@@ -26,13 +26,13 @@
         android:hint="@string/username"
         android:inputType="none"
         android:minHeight="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/passwordEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints="password"
@@ -41,9 +41,9 @@
         android:inputType="textPassword"
         android:minHeight="50dp"
         app:layout_constraintBottom_toTopOf="@+id/saveCredsButton"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextUsername"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextUsername"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextUsername" />
+        app:layout_constraintEnd_toEndOf="@+id/usernameEditText"
+        app:layout_constraintStart_toStartOf="@+id/usernameEditText"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
 
     <Button
         android:id="@+id/saveCredsButton"
@@ -52,8 +52,8 @@
         android:layout_marginBottom="250dp"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
+        app:layout_constraintStart_toStartOf="@+id/passwordEditText"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

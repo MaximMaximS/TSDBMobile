@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textViewAppDescription"
+        android:id="@+id/descriptionTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -17,25 +17,26 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonOpenEpisodeSearch"
+        app:layout_constraintBottom_toTopOf="@+id/openSearchButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonOpenEpisodeSearch"
+        android:id="@+id/openSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="200dp"
         android:text="@string/search_episode"
+        android:onClick="openSearch"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewAppDescription" />
+        app:layout_constraintTop_toBottomOf="@id/descriptionTextView" />
 
     <Button
-        android:id="@+id/buttonSettings"
+        android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -50,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonSettings"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonSettings"
-        app:layout_constraintTop_toTopOf="@+id/buttonSettings" />
+        app:layout_constraintStart_toEndOf="@+id/settingsButton"
+        app:layout_constraintTop_toTopOf="@+id/settingsButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
