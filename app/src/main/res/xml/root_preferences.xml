@@ -9,5 +9,10 @@
             android:key="api_locale"
             android:title="@string/api_locale"
             app:summary="%s" />
+        <EditTextPreference
+            android:key="api_address"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/api_address" />
     </PreferenceCategory>
 </PreferenceScreen>

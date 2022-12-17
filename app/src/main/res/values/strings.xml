@@ -1,10 +1,17 @@
 <resources>
     <string name="app_name">TSDBMobile</string>
-    <string name="search_episode">Search</string>
+    <string name="search_episode">Search episodes</string>
     <string name="settings">Settings</string>
-    <string name="description">TSDBMobile</string>
+    <string name="description">Keep track of your watched episodes!</string>
     <string name="api_settings">API Settings</string>
     <string name="api_locale">Locale</string>
     <string name="api_default_locale">en</string>
+    <string name="api_address">API Address</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="login_label">Login to your account</string>
 </resources>

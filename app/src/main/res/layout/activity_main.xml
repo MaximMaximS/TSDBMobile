@@ -11,12 +11,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="10dp"
         android:text="@string/description"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonOpenEpisodeSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="200dp"
         android:text="@string/search_episode"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewAppDescription" />
@@ -35,19 +38,20 @@
         android:id="@+id/buttonSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
         android:onClick="openPreferences"
         android:text="@string/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonOpenEpisodeSearch" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/loginButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewApi"
+    <Button
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="249dp"
+        android:text="@string/login"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonSettings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/buttonSettings"
+        app:layout_constraintTop_toTopOf="@+id/buttonSettings" />
 </androidx.constraintlayout.widget.ConstraintLayout>
