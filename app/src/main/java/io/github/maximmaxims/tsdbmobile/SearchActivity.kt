@@ -3,49 +3,69 @@ package io.github.maximmaxims.tsdbmobile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.snackbar.Snackbar
+import io.github.maximmaxims.tsdbmobile.classes.SearchedEpisode
+import io.github.maximmaxims.tsdbmobile.classes.TSDBAPI
+import io.github.maximmaxims.tsdbmobile.utils.ErrorType
+import io.github.maximmaxims.tsdbmobile.utils.ErrorUtil
 
 class SearchActivity : AppCompatActivity() {
-    var currentList: List<Episode> = listOf()
+    private lateinit var seasonEditText: EditText
+    private lateinit var episodeEditText: EditText
+    private lateinit var titleEditText: EditText
+    private lateinit var searchBySEButton: Button
+    private lateinit var searchByTitleButton: Button
+    private lateinit var episodeSpinner: Spinner
+    private lateinit var openBySEButton: Button
+    private lateinit var progressBar: LinearProgressIndicator
+
+    private var currentList: Array<SearchedEpisode> = arrayOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        seasonEditText = findViewById(R.id.seasonEditText)
+        episodeEditText = findViewById(R.id.episodeEditText)
+        titleEditText = findViewById(R.id.titleEditText)
+        searchBySEButton = findViewById(R.id.searchBySEButton)
+        searchByTitleButton = findViewById(R.id.searchByTitleButton)
+        episodeSpinner = findViewById(R.id.episodeSpinner)
+        openBySEButton = findViewById(R.id.openBySEButton)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     private fun loading(state: Boolean) {
-        val spinner = findViewById<Spinner>(R.id.episodeSpinner)
-        val openButton = findViewById<Button>(R.id.openBySEButton)
         runOnUiThread {
-            findViewById<EditText>(R.id.seasonEditText).isEnabled = !state
-            findViewById<EditText>(R.id.episodeEditText).isEnabled = !state
-            findViewById<Button>(R.id.searchBySEButton).isEnabled = !state
-            findViewById<EditText>(R.id.titleEditText).isEnabled = !state
-            findViewById<Button>(R.id.searchByTitleButton).isEnabled = !state
-            spinner.isEnabled = !state
-            openButton.isEnabled = !state
-            findViewById<LinearProgressIndicator>(R.id.progressBar).visibility =
-                if (state) View.VISIBLE else View.INVISIBLE
+            seasonEditText.isEnabled = !state
+            episodeEditText.isEnabled = !state
+            searchBySEButton.isEnabled = !state
+            titleEditText.isEnabled = !state
+            searchByTitleButton.isEnabled = !state
+            episodeSpinner.isEnabled = !state
+            openBySEButton.isEnabled = !state
+            progressBar.visibility = if (state) View.VISIBLE else View.INVISIBLE
             if (state) {
-                spinner.adapter = null
-                spinner.visibility = View.INVISIBLE
-                openButton.visibility = View.INVISIBLE
+                episodeSpinner.adapter = null
+                episodeSpinner.visibility = View.INVISIBLE
+                openBySEButton.visibility = View.INVISIBLE
             }
         }
     }
 
     fun searchEpisodeBySE(view: View) {
-        val seasonView = findViewById<EditText>(R.id.seasonEditText)
-        val episodeView = findViewById<EditText>(R.id.episodeEditText)
-        val season = seasonView.text.toString().toUIntOrNull()
-        val episode = episodeView.text.toString().toUIntOrNull()
+        val season = seasonEditText.text.toString().toUIntOrNull()
+        val episode = episodeEditText.text.toString().toUIntOrNull()
         if (season == null || episode == null) {
-            Snackbar.make(view, "Please enter season and episode numbers", Snackbar.LENGTH_LONG).show()
+            ErrorUtil.showSnackbar(view, ErrorType.EMPTY_SE)
             return
         }
-        val api = TSDBAPI.getInstance(this, view) ?: return
+        val api = TSDBAPI.getInstance(view) ?: return
         loading(true)
         api.searchBySE(season, episode, view, always = {
             loading(false)
@@ -57,37 +77,30 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun searchEpisodeByTitle(view: View) {
-        val titleView = findViewById<EditText>(R.id.titleEditText)
-        val title = titleView.text.toString()
+        val title = titleEditText.text.toString()
         if (title == "") {
-            Snackbar.make(view, "Please enter episode title", Snackbar.LENGTH_LONG).show()
+            ErrorUtil.showSnackbar(view, ErrorType.EMPTY_TITLE)
             return
         }
-        val api = TSDBAPI.getInstance(this, view) ?: return
+        val api = TSDBAPI.getInstance(view) ?: return
         loading(true)
         api.searchByTitle(title, view, always = {
             loading(false)
         }, onSuccess = { episodes ->
-            val names = episodes.map { it.name }
-            if (names.isEmpty()) {
-                Snackbar.make(view, "No episodes found", Snackbar.LENGTH_LONG).show()
-                return@searchByTitle
-            }
+            val names = episodes.map { it.title }
             currentList = episodes
-            val spinner = findViewById<Spinner>(R.id.episodeSpinner)
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, names)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             runOnUiThread {
-                spinner.adapter = adapter
-                spinner.visibility = View.VISIBLE
-                findViewById<View>(R.id.openBySEButton).visibility = View.VISIBLE
+                episodeSpinner.adapter = adapter
+                episodeSpinner.visibility = View.VISIBLE
+                openBySEButton.visibility = View.VISIBLE
             }
         })
     }
 
     fun openEpisode(view: View) {
-        val spinner = findViewById<Spinner>(R.id.episodeSpinner)
-        val episode = currentList[spinner.selectedItemPosition]
+        val episode = currentList[episodeSpinner.selectedItemPosition]
         val intent = Intent(this, EpisodeActivity::class.java)
         intent.putExtra(EpisodeActivity.EPISODE_ID, episode.id.toInt())
         startActivity(intent)

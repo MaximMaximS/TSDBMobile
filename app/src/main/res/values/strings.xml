@@ -29,11 +29,31 @@
 
     <string name="episode_title">Title:</string>
     <string name="premiere">Premiere:</string>
-    <string name="screenplay">Screenplay:</string>
+    <string name="screenplay">Written by:</string>
     <string name="direction">Directed by:</string>
     <string name="watched">Watched:</string>
     <string name="watched_on">Yes ✔️</string>
     <string name="watched_off">No ❌</string>
     <string name="view_details">Details</string>
     <string name="plot">Plot:</string>
+
+    <string name="code_400">Invalid request</string>
+    <string name="code_401">Invalid credentials</string>
+    <string name="code_403">Forbidden</string>
+    <string name="code_404">Not Found</string>
+    <string name="code_429">Too many requests</string>
+    <string name="code_500">Internal Server Error</string>
+    <string name="code_unknown">Unhandled response code</string>
+
+    <string name="no_creds">Please log in first</string>
+    <string name="api_fail">Failed to connect to API</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="failed_to_parse">Failed to parse response</string>
+    <string name="no_episodes_found">No episodes found</string>
+    <string name="id_mismatch">ID mismatch</string>
+    <string name="empty_creds">Please type username and password</string>
+    <string name="empty_title">Please type episode title</string>
+    <string name="empty_se">Please type season and episode number</string>
+
+    <string name="date_format">MM/dd/yyyy</string>
 </resources>

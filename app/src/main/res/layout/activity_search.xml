@@ -86,7 +86,7 @@
         android:ems="10"
         android:hint="@string/episode_hint"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:minHeight="48dp"
         app:layout_constraintEnd_toStartOf="@id/searchByTitleButton"
         app:layout_constraintStart_toStartOf="@+id/searchBySEHeaderTextView"

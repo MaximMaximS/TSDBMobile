@@ -9,10 +9,19 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var loginButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        loginButton = findViewById(R.id.loginButton)
+
         updateButton()
+
+        // TODO: Remove before release
+        val intent = Intent(this, EpisodeActivity::class.java)
+        intent.putExtra(EpisodeActivity.EPISODE_ID, 1)
+        startActivity(intent)
     }
 
     override fun onResume() {
@@ -31,16 +40,17 @@ class MainActivity : AppCompatActivity() {
         )
 
         val username = encryptedSharedPreferences.getString("username", "")
-        val button = findViewById<Button>(R.id.loginButton)
+
+
         if (username == "") {
-            button.setText(R.string.login)
-            button.setOnClickListener {
+            loginButton.setText(R.string.login)
+            loginButton.setOnClickListener {
                 val intent = Intent(this, SetCredsActivity::class.java)
                 startActivity(intent)
             }
         } else {
-            button.setText(R.string.logout)
-            button.setOnClickListener {
+            loginButton.setText(R.string.logout)
+            loginButton.setOnClickListener {
                 val editor = encryptedSharedPreferences.edit()
                 editor.putString("username", "")
                 editor.putString("password", "")
