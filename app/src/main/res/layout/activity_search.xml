@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/searchBySEHeaderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/by_number"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/seasonEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/season_prefix"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toStartOf="@id/episodeEditText"
+        app:layout_constraintStart_toStartOf="@id/searchBySEHeaderTextView"
+        app:layout_constraintTop_toBottomOf="@id/searchBySEHeaderTextView" />
+
+    <EditText
+        android:id="@+id/episodeEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:hint="@string/episode_prefix"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/seasonEditText"
+        app:layout_constraintEnd_toStartOf="@id/searchBySEButton"
+        app:layout_constraintStart_toEndOf="@+id/seasonEditText"
+        app:layout_constraintTop_toTopOf="@id/seasonEditText" />
+
+    <Button
+        android:id="@+id/searchBySEButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:onClick="searchEpisodeBySE"
+        android:text="@string/search"
+        app:layout_constraintBottom_toBottomOf="@+id/seasonEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/episodeEditText"
+        app:layout_constraintTop_toTopOf="@+id/seasonEditText"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/searchByTitleHeaderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/by_title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/searchBySEHeaderTextView"
+        app:layout_constraintTop_toBottomOf="@+id/seasonEditText" />
+
+    <EditText
+        android:id="@+id/titleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/episode_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toStartOf="@id/searchByTitleButton"
+        app:layout_constraintStart_toStartOf="@+id/searchBySEHeaderTextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchByTitleHeaderTextView"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/searchByTitleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:minHeight="48dp"
+        android:onClick="searchEpisodeByTitle"
+        android:text="@string/search"
+        app:layout_constraintBottom_toBottomOf="@id/titleEditText"
+        app:layout_constraintEnd_toEndOf="@+id/searchBySEButton"
+        app:layout_constraintStart_toEndOf="@id/titleEditText"
+        app:layout_constraintTop_toTopOf="@id/titleEditText" />
+
+    <Spinner
+        android:id="@+id/episodeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:minHeight="48dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/openBySEButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleEditText"
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/openBySEButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openEpisode"
+        android:text="@string/open_button"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/episodeSpinner"
+        app:layout_constraintEnd_toEndOf="@+id/searchBySEButton"
+        app:layout_constraintStart_toEndOf="@+id/episodeSpinner"
+        app:layout_constraintTop_toTopOf="@+id/episodeSpinner"
+        tools:visibility="visible" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
