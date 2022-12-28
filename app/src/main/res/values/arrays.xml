@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="api_locales">
+    <string-array name="api_languages">
         <item>English</item>
         <item>Czech</item>
     </string-array>
-    <string-array name="api_locales_values">
+    <string-array name="api_language_values">
         <item>en</item>
         <item>cs</item>
     </string-array>

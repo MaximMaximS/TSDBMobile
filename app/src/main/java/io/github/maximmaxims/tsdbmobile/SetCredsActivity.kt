@@ -1,6 +1,7 @@
 package io.github.maximmaxims.tsdbmobile
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -9,6 +10,8 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import io.github.maximmaxims.tsdbmobile.classes.TSDBAPI
+import io.github.maximmaxims.tsdbmobile.exceptions.TSDBException
+import io.github.maximmaxims.tsdbmobile.exceptions.UserException
 import io.github.maximmaxims.tsdbmobile.utils.ErrorType
 import io.github.maximmaxims.tsdbmobile.utils.ErrorUtil
 
@@ -49,29 +52,42 @@ class SetCredsActivity : AppCompatActivity() {
         passwordEditText.setText(encryptedSharedPreferences.getString("password", ""))
 
         saveCredsButton.setOnClickListener {
-            val api = TSDBAPI.getInstance(it) ?: return@setOnClickListener
+            try {
+                loading(true)
+                val api = TSDBAPI.getInstance(this) ?: throw UserException(ErrorType.INVALID_URL)
 
-            val username = usernameEditText.text.toString()
-            val password = passwordEditText.text.toString()
+                val username = usernameEditText.text.toString()
+                val password = passwordEditText.text.toString()
 
-            if (username == "" || password == "") {
-                // Show snackbar
-                ErrorUtil.showSnackbar(it, ErrorType.EMPTY_CREDS)
-                return@setOnClickListener
-            }
+                if (username == "" || password == "") {
+                    // Show snackbar
+                    throw UserException(ErrorType.EMPTY_CREDS)
+                }
 
-            loading(true)
-
-            api.login(username, password, it, always = {
+                api.login(username, password, onSuccess = {
+                    loading(false)
+                    val editor = encryptedSharedPreferences.edit()
+                    editor.putString("username", username)
+                    editor.putString("password", password)
+                    editor.apply()
+                    finish()
+                }, e = { e ->
+                    loading(false)
+                    ErrorUtil.showSnackbar(e, it)
+                })
+            } catch (e: TSDBException) {
                 loading(false)
-            }, onSuccess = {
-                val editor = encryptedSharedPreferences.edit()
-                editor.putString("username", username)
-                editor.putString("password", password)
-                editor.apply()
-                finish()
-            })
-
+                ErrorUtil.showSnackbar(e, it)
+            }
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

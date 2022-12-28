@@ -16,23 +16,23 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".EpisodeActivity"
+            android:name=".PlotActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SearchActivity" />
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
+        </activity>
+        <activity
+            android:name=".EpisodeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
         <activity
             android:name=".SearchActivity"
             android:exported="false"
             android:label="@string/search_episode">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -42,9 +42,6 @@
             android:exported="false"
             android:label="@string/login_label">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-            <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
@@ -52,9 +49,6 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -65,6 +59,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

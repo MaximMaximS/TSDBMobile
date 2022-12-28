@@ -17,11 +17,6 @@ class MainActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.loginButton)
 
         updateButton()
-
-        // TODO: Remove before release
-        val intent = Intent(this, EpisodeActivity::class.java)
-        intent.putExtra(EpisodeActivity.EPISODE_ID, 1)
-        startActivity(intent)
     }
 
     override fun onResume() {
@@ -60,12 +55,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openPreferences(view: View) {
+    fun openPreferences(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
 
-    fun openSearch(view: View) {
+    fun openSearch(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
     }

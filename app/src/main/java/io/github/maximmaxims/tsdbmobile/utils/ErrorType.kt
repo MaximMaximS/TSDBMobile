@@ -1,8 +1,5 @@
 package io.github.maximmaxims.tsdbmobile.utils
 
-enum class ErrorType(val value: Boolean) {
-    NO_CREDS(false), API_FAIL(false), INVALID_URL(false), FAILED_TO_PARSE(true), NO_EPISODES_FOUND(false), ID_MISMATCH(
-        true
-    ),
-    EMPTY_CREDS(false), EMPTY_TITLE(false), EMPTY_SE(false)
+enum class ErrorType {
+    NOT_LOGGED_IN, API_FAIL, INVALID_URL, NO_EPISODES_FOUND, EMPTY_CREDS, EMPTY_TITLE, EMPTY_SE, NO_PLOT
 }

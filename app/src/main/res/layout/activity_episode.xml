@@ -121,16 +121,18 @@
         android:layout_marginTop="5dp"
         android:checked="false"
         android:enabled="false"
+        android:onClick="markEpisode"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/watchedLabelTextView"
         app:layout_constraintTop_toBottomOf="@id/writtenByTextView" />
 
     <Button
-        android:id="@+id/detailsButton"
+        android:id="@+id/plotButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="@string/view_details"
+        android:onClick="showPlot"
+        android:text="@string/view_plot"
         app:layout_constraintBottom_toBottomOf="@+id/watchedSwitch"
         app:layout_constraintEnd_toEndOf="@+id/writtenByTextView"
         app:layout_constraintTop_toTopOf="@+id/watchedSwitch"
@@ -143,6 +145,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="15dp"
         android:enabled="false"
+        android:onClick="prevEpisode"
         android:text="@string/previous"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/episodeIdTextView" />
@@ -167,6 +170,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:enabled="false"
+        android:onClick="nextEpisode"
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="@+id/prevButton"
         app:layout_constraintStart_toEndOf="@id/episodeIdTextView" />

@@ -1,15 +1,18 @@
 package io.github.maximmaxims.tsdbmobile.classes
 
+import android.content.Context
 import android.util.Log
-import android.view.View
 import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.github.maximmaxims.tsdbmobile.R
+import io.github.maximmaxims.tsdbmobile.exceptions.InvalidResponseException
+import io.github.maximmaxims.tsdbmobile.exceptions.ResponseException
+import io.github.maximmaxims.tsdbmobile.exceptions.TSDBException
+import io.github.maximmaxims.tsdbmobile.exceptions.UserException
 import io.github.maximmaxims.tsdbmobile.utils.ErrorType
-import io.github.maximmaxims.tsdbmobile.utils.ErrorUtil
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.IOException
@@ -19,21 +22,20 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
     private val client = OkHttpClient()
 
     companion object {
-        fun getInstance(view: View): TSDBAPI? {
-            val context = view.context
+        /**
+         * Create a new instance of TSDBAPI.
+         *
+         * @return A new instance of TSDBAPI.
+         */
+        fun getInstance(context: Context): TSDBAPI? {
             val url = PreferenceManager.getDefaultSharedPreferences(context).getString("api_address", "")
             if (url.isNullOrEmpty()) {
-                ErrorUtil.showSnackbar(view, ErrorType.API_FAIL)
                 return null
             }
             val lang = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("api_lang", context.getString(R.string.api_default_locale))!!
+                .getString("api_language", context.getString(R.string.api_default_language)) ?: "en"
 
-            val parsedUrl = url.toHttpUrlOrNull()
-            if (parsedUrl == null) {
-                ErrorUtil.showSnackbar(view, ErrorType.INVALID_URL)
-                return null
-            }
+            val parsedUrl = url.toHttpUrlOrNull() ?: return null
 
             val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
             val encryptedSharedPreferences = EncryptedSharedPreferences.create(
@@ -44,56 +46,76 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             )
 
-            val username = encryptedSharedPreferences.getString("username", "")
-            val password = encryptedSharedPreferences.getString("password", "")
+            val username = encryptedSharedPreferences.getString("username", "") ?: ""
+            val password = encryptedSharedPreferences.getString("password", "") ?: ""
 
-            val creds = if (username.isNullOrEmpty() || password.isNullOrEmpty()) {
-                null
-            } else {
-                Credentials.basic(username, password)
-            }
-
-            return TSDBAPI(parsedUrl, lang, creds)
+            return TSDBAPI(parsedUrl, lang, Credentials.basic(username, password))
         }
     }
 
-    private fun callback(view: View, always: () -> Unit, onSuccess: (Response) -> Unit) = object : Callback {
+    /**
+     * Callback builder
+     *
+     * @param e Error callback
+     * @param onSuccess The function to run if the request is successful.
+     * @return A new Callback object.
+     */
+    private fun callback(e: (TSDBException) -> Unit, onSuccess: (Response) -> Unit) = object : Callback {
         override fun onFailure(call: Call, e: IOException) {
-            always()
-            ErrorUtil.showSnackbar(view, ErrorType.API_FAIL)
+            e(UserException(ErrorType.API_FAIL))
         }
 
         override fun onResponse(call: Call, response: Response) {
-            always()
             onSuccess(response)
         }
     }
 
-    private fun parseIdJson(response: Response): UInt? {
-        val json = response.peekBody(1024).string()
+    /**
+     * Parse JSON of single episode id.
+     *
+     * @param response The response to parse.
+     * @return The episode id.
+     * @throws InvalidResponseException If the response is invalid.
+     */
+    private fun parseIdJson(response: Response): UInt {
+        val json = response.body?.string() ?: throw InvalidResponseException(response, false)
         return try {
             val jsonObject = Gson().fromJson(json, JsonObject::class.java)
             jsonObject.get("id").asInt.toUInt()
         } catch (e: Exception) {
-            null
+            throw InvalidResponseException(response, false)
         }
     }
 
-    private fun parseSearchedEpisodeArrayJson(response: Response): Array<SearchedEpisode>? {
-        val json = response.peekBody(4096).string()
+    /**
+     * Parse JSON of multiple episode titles and ids.
+     *
+     * @param response The response to parse.
+     * @return An array of episode titles and ids.
+     * @throws InvalidResponseException If the response is invalid.
+     */
+    private fun parseSearchedEpisodeArrayJson(response: Response): Array<SearchedEpisode> {
+        val json = response.body?.string() ?: throw InvalidResponseException(response, false)
 
-        return try {
-            Gson().fromJson(json, Array<SearchedEpisode>::class.java)
+        try {
+            return Gson().fromJson(json, Array<SearchedEpisode>::class.java)
         } catch (e: Exception) {
-            Log.e("TSDBAPI", "Error parsing JSON: $e")
-            null
+            throw InvalidResponseException(response, false)
         }
     }
 
-    private fun parseEpisodeJson(response: Response): Episode? {
-        val json = response.peekBody(1024).string()
+    /**
+     * Parse JSON of single episode.
+     *
+     * @param response The response to parse.
+     * @return The episode.
+     * @throws InvalidResponseException If the response is invalid.
+     */
+    private fun parseEpisodeJson(response: Response): Episode {
+        val json = response.body?.string() ?: throw InvalidResponseException(response, false)
+        Log.d("TSDBAPI", json)
 
-        return try {
+        try {
             val episode = Gson().fromJson(json, JsonObject::class.java)
             val watched = episode.get("watched").asBoolean
             val title = episode.get("title").asString
@@ -104,34 +126,52 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
             val directedBy = episode.get("directedBy").asString
             val writtenBy = episode.get("writtenBy").asString
             val plot = episode.get("plot").asString
-            Episode.create(title, premiere, id, s, e, directedBy, writtenBy, plot, watched)
+            return Episode.create(title, premiere, id, s, e, directedBy, writtenBy, plot, watched)
+                ?: throw InvalidResponseException(response, false)
         } catch (e: Exception) {
-            null
+            throw InvalidResponseException(response, false)
         }
-
     }
 
-    fun login(username: String, password: String, view: View, always: () -> Unit, onSuccess: () -> Unit) {
+    /**
+     * Log in to the API.
+     *
+     * @param username The username to log in with.
+     * @param password The password to log in with.
+     * @param onSuccess The function to run if the request is successful.
+     * @param e Error callback.
+     */
+    fun login(username: String, password: String, onSuccess: () -> Unit, e: (TSDBException) -> Unit) {
         val newCreds = Credentials.basic(username, password)
         val request = Request.Builder().apply {
             url(baseUrl.newBuilder().addPathSegment("login").build())
 
             header("Authorization", newCreds)
         }.build()
-
-        client.newCall(request).enqueue(callback(view, always) { response ->
-            if (response.code == 200) {
-                onSuccess()
-            } else {
-                ErrorUtil.showSnackbar(view, response)
+        client.newCall(request).enqueue(callback(e) { response ->
+            try {
+                if (response.code == 200) {
+                    onSuccess()
+                } else {
+                    throw ResponseException(response)
+                }
+            } catch (e: TSDBException) {
+                e(e)
             }
         })
     }
 
-    fun searchBySE(season: UInt, episode: UInt, view: View, always: () -> Unit, onSuccess: (UInt) -> Unit) {
+    /**
+     * Search episode by SE.
+     *
+     * @param season The season number.
+     * @param episode The episode number.
+     * @param onSuccess The function to run if the request is successful.
+     * @param e Error callback.
+     */
+    fun searchBySE(season: UInt, episode: UInt, onSuccess: (UInt) -> Unit, e: (TSDBException) -> Unit) {
         if (creds == null) {
-            ErrorUtil.showSnackbar(view, ErrorType.NO_CREDS)
-            always()
+            e(UserException(ErrorType.NOT_LOGGED_IN))
             return
         }
         val request = Request.Builder().apply {
@@ -142,24 +182,30 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
             header("Authorization", creds)
         }.build()
 
-        client.newCall(request).enqueue(callback(view, always) { response ->
-            if (response.code == 200) {
-                val result = parseIdJson(response)
-                if (result == null) {
-                    ErrorUtil.showSnackbar(view, ErrorType.FAILED_TO_PARSE, response.body?.string())
-                } else {
+        client.newCall(request).enqueue(callback(e) { response ->
+            try {
+                if (response.code == 200) {
+                    val result = parseIdJson(response)
                     onSuccess(result)
+                } else {
+                    throw ResponseException(response)
                 }
-            } else {
-                ErrorUtil.showSnackbar(view, response)
+            } catch (e: TSDBException) {
+                e(e)
             }
         })
     }
 
-    fun searchByTitle(title: String, view: View, always: () -> Unit, onSuccess: (Array<SearchedEpisode>) -> Unit) {
+    /**
+     * Search episode by title.
+     *
+     * @param title The title to search for.
+     * @param onSuccess The function to run if the request is successful.
+     * @param e Error callback.
+     */
+    fun searchByTitle(title: String, onSuccess: (Array<SearchedEpisode>) -> Unit, e: (TSDBException) -> Unit) {
         if (creds == null) {
-            ErrorUtil.showSnackbar(view, ErrorType.NO_CREDS)
-            always()
+            e(UserException(ErrorType.NOT_LOGGED_IN))
             return
         }
         val request = Request.Builder().apply {
@@ -170,26 +216,34 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
             header("Authorization", creds)
         }.build()
 
-        client.newCall(request).enqueue(callback(view, always) { response ->
-            if (response.code == 200) {
-                val result = parseSearchedEpisodeArrayJson(response)
-                if (result == null) {
-                    ErrorUtil.showSnackbar(view, ErrorType.FAILED_TO_PARSE, response.body?.string())
-                } else if (result.isEmpty()) {
-                    ErrorUtil.showSnackbar(view, ErrorType.NO_EPISODES_FOUND, response.body?.string())
+        client.newCall(request).enqueue(callback(e) { response ->
+            try {
+                if (response.code == 200) {
+                    val result = parseSearchedEpisodeArrayJson(response)
+                    if (result.isEmpty()) {
+                        throw UserException(ErrorType.NO_EPISODES_FOUND)
+                    } else {
+                        onSuccess(result)
+                    }
                 } else {
-                    onSuccess(result)
+                    throw ResponseException(response)
                 }
-            } else {
-                ErrorUtil.showSnackbar(view, response)
+            } catch (e: TSDBException) {
+                e(e)
             }
         })
     }
 
-    fun getEpisode(id: UInt, view: View, always: () -> Unit, onSuccess: (Episode) -> Unit) {
+    /**
+     * Get episode by id.
+     *
+     * @param id The id of the episode.
+     * @param onSuccess The function to run if the request is successful.
+     * @param e Error callback.
+     */
+    fun getEpisode(id: UInt, onSuccess: (Episode) -> Unit, e: (TSDBException) -> Unit) {
         if (creds == null) {
-            ErrorUtil.showSnackbar(view, ErrorType.NO_CREDS)
-            always()
+            e(UserException(ErrorType.NOT_LOGGED_IN))
             return
         }
         val request = Request.Builder().apply {
@@ -201,18 +255,55 @@ class TSDBAPI private constructor(private val baseUrl: HttpUrl, private val lang
             header("Authorization", creds)
         }.build()
 
-        client.newCall(request).enqueue(callback(view, always) { response ->
-            if (response.code == 200) {
-                val result = parseEpisodeJson(response)
-                if (result == null) {
-                    ErrorUtil.showSnackbar(view, ErrorType.FAILED_TO_PARSE, response.body?.string())
-                } else if (result.id != id) {
-                    ErrorUtil.showSnackbar(view, ErrorType.ID_MISMATCH, response.body?.string())
+        client.newCall(request).enqueue(callback(e) { response ->
+            try {
+                if (response.code == 200) {
+                    val result = parseEpisodeJson(response)
+                    if (result.id != id) {
+                        throw InvalidResponseException(response, true)
+                    } else {
+                        onSuccess(result)
+                    }
                 } else {
-                    onSuccess(result)
+                    throw ResponseException(response)
                 }
-            } else {
-                ErrorUtil.showSnackbar(view, response)
+            } catch (e: TSDBException) {
+                e(e)
+            }
+        })
+    }
+
+    /**
+     * Mark episode as watched or unwatched.
+     *
+     * @param id The id of the episode.
+     * @param watched Whether the episode should be marked as watched or unwatched.
+     * @param onSuccess The function to run if the request is successful.
+     * @param e Error callback.
+     */
+    fun markEpisode(id: UInt, watched: Boolean, onSuccess: () -> Unit, e: (TSDBException) -> Unit) {
+        if (creds == null) {
+            e(UserException(ErrorType.NOT_LOGGED_IN))
+            return
+        }
+        val request = Request.Builder().apply {
+            url(
+                baseUrl.newBuilder().addPathSegment("episode").addPathSegment("id").addPathSegment(id.toString())
+                    .addPathSegment("watch").build()
+            ).post(
+                FormBody.Builder().add("state", if (watched) "true" else "false").build()
+            ).header("Authorization", creds)
+        }.build()
+
+        client.newCall(request).enqueue(callback(e) { response ->
+            try {
+                if (response.code == 204) {
+                    onSuccess()
+                } else {
+                    throw ResponseException(response)
+                }
+            } catch (e: TSDBException) {
+                e(e)
             }
         })
     }
