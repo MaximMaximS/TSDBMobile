@@ -1,14 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/api_settings">
-
-        <ListPreference
-            android:defaultValue="@string/api_default_language"
-            android:entries="@array/api_languages"
-            android:entryValues="@array/api_language_values"
-            android:key="api_language"
-            android:title="@string/api_language"
-            app:summary="%s" />
         <EditTextPreference
             android:key="api_address"
             android:selectAllOnFocus="true"

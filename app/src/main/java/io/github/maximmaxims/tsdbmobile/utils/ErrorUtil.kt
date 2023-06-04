@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import io.github.maximmaxims.tsdbmobile.R
-import io.github.maximmaxims.tsdbmobile.exceptions.InvalidResponseException
-import io.github.maximmaxims.tsdbmobile.exceptions.ResponseException
-import io.github.maximmaxims.tsdbmobile.exceptions.TSDBException
-import io.github.maximmaxims.tsdbmobile.exceptions.UserException
+import io.github.maximmaxims.tsdbmobile.exceptions.*
 
 object ErrorUtil {
     /**
@@ -20,7 +17,6 @@ object ErrorUtil {
     private fun getMessage(context: Context, type: ErrorType): String {
         return when (type) {
             ErrorType.NOT_LOGGED_IN -> context.getString(R.string.not_logged_in)
-            ErrorType.API_FAIL -> context.getString(R.string.api_fail)
             ErrorType.INVALID_URL -> context.getString(R.string.invalid_url)
             ErrorType.NO_EPISODES_FOUND -> context.getString(R.string.no_episodes_found)
             ErrorType.EMPTY_CREDS -> context.getString(R.string.empty_creds)
@@ -54,7 +50,7 @@ object ErrorUtil {
 
             is InvalidResponseException -> {
                 Log.e("ErrorUtil", "Failed to parse response", e)
-                Log.e("ErrorUtil", "Response: ${e.response}")
+                Log.e("ErrorUtil", "Response: ${e.response.body}")
                 if (e.isId) {
                     context.getString(R.string.id_mismatch)
                 } else {
@@ -64,6 +60,11 @@ object ErrorUtil {
 
             is UserException -> {
                 getMessage(context, e.type)
+            }
+
+            is RequestFailedException -> {
+                Log.e("ErrorUtil", "Request failed", e.e)
+                context.getString(R.string.request_failed)
             }
 
             else -> {

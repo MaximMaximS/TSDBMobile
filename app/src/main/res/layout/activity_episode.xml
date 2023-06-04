@@ -37,7 +37,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/titleLabelTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Placeholder Name" />
 
     <TextView
         android:id="@+id/premiereLabelTextView"
@@ -58,49 +59,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/titleTextView"
         app:layout_constraintStart_toEndOf="@id/premiereLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
-
-    <TextView
-        android:id="@+id/directedByLabelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/direction"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/premiereLabelTextView"
-        app:layout_constraintTop_toTopOf="@id/directedByTextView" />
-
-    <TextView
-        android:id="@+id/directedByTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/premiereTextView"
-        app:layout_constraintStart_toEndOf="@id/directedByLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/premiereTextView" />
-
-    <TextView
-        android:id="@+id/writtenByLabelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/screenplay"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/directedByLabelTextView"
-        app:layout_constraintTop_toTopOf="@id/writtenByTextView" />
-
-    <TextView
-        android:id="@+id/writtenByTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/directedByTextView"
-        app:layout_constraintStart_toEndOf="@id/writtenByLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/directedByTextView" />
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        tools:text="Placeholder Premiere" />
 
     <TextView
         android:id="@+id/watchedLabelTextView"
@@ -110,7 +70,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/watchedSwitch"
-        app:layout_constraintStart_toStartOf="@+id/writtenByLabelTextView"
+        app:layout_constraintStart_toStartOf="@+id/premiereLabelTextView"
         app:layout_constraintTop_toTopOf="@id/watchedSwitch" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -124,19 +84,37 @@
         android:onClick="markEpisode"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/watchedLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/writtenByTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/premiereTextView" />
 
-    <Button
-        android:id="@+id/plotButton"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/episodeNumberTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:enabled="false"
-        android:onClick="showPlot"
-        android:text="@string/view_plot"
+        android:layout_marginStart="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/watchedSwitch"
-        app:layout_constraintEnd_toEndOf="@+id/writtenByTextView"
+        app:layout_constraintEnd_toEndOf="@+id/premiereTextView"
+        app:layout_constraintStart_toEndOf="@+id/watchedSwitch"
         app:layout_constraintTop_toTopOf="@+id/watchedSwitch"
-        app:layout_constraintVertical_bias="1.0" />
+        tools:text="S01E01" />
+
+    <TextView
+        android:id="@+id/plotTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="vertical"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/prevButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/watchedSwitch"
+        tools:text="Placeholder Episode Plot" />
 
     <Button
         android:id="@+id/prevButton"
@@ -174,5 +152,6 @@
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="@+id/prevButton"
         app:layout_constraintStart_toEndOf="@id/episodeIdTextView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

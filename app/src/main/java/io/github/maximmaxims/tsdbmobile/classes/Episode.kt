@@ -8,27 +8,24 @@ import java.time.ZonedDateTime
 class Episode private constructor(
     val title: String,
     val premiere: Instant,
-    val id: UInt,
-    val season: UInt,
-    val episode: UInt,
-    val directedBy: String,
-    val writtenBy: String,
+    val id: UShort,
+    val season: UShort,
+    val episode: UShort,
     val plot: String,
     val watched: Boolean
 ) {
     companion object {
-        fun create(
+        private fun create(
             title: String,
-            premiere: String,
-            id: UInt,
-            season: UInt,
-            episode: UInt,
-            directedBy: String,
-            writtenBy: String,
+            premiere: UInt,
+            id: UShort,
+            season: UShort,
+            episode: UShort,
             plot: String,
             watched: Boolean
         ): Episode? {
-            val date = Instant.parse(premiere)
+            // Parse JS timestamp
+            val date = Instant.ofEpochSecond(premiere.toLong())
             val zoned = ZonedDateTime.ofInstant(date, ZoneId.of("UTC"))
             // Check if time is 00:00:00
             if (zoned.hour != 0 || zoned.minute != 0 || zoned.second != 0) {
@@ -36,7 +33,11 @@ class Episode private constructor(
                 return null
             }
 
-            return Episode(title, date, id, season, episode, directedBy, writtenBy, plot, watched)
+            return Episode(title, date, id, season, episode, plot, watched)
+        }
+
+        fun create(i: EpisodeInfo, w: Boolean): Episode? {
+            return create(i.title, i.premiere, i.id, i.season, i.episode, i.plot, w)
         }
     }
 }

@@ -1,6 +1,5 @@
 package io.github.maximmaxims.tsdbmobile
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -28,21 +27,19 @@ class EpisodeActivity : AppCompatActivity() {
     }
 
     private lateinit var watchedSwitch: SwitchMaterial
-    private lateinit var detailsButton: Button
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
     private lateinit var progressBar: LinearProgressIndicator
 
     private lateinit var titleTextView: TextView
     private lateinit var premiereTextView: TextView
-    private lateinit var directedByTextView: TextView
-    private lateinit var writtenByTextView: TextView
+    private lateinit var episodeNumberTextView: TextView
+    private lateinit var plotTextView: TextView
     private lateinit var episodeIdTextView: TextView
     private fun loading(state: Boolean) {
         val valid = episode != null && !state
         runOnUiThread {
             watchedSwitch.isEnabled = valid
-            detailsButton.isEnabled = valid
             prevButton.isEnabled = valid
             nextButton.isEnabled = valid
 
@@ -50,7 +47,7 @@ class EpisodeActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateView(newId: UInt, view: View) {
+    private fun updateView(newId: UShort, view: View) {
         try {
             loading(true)
             val api = TSDBAPI.getInstance(this) ?: throw UserException(ErrorType.INVALID_URL)
@@ -63,11 +60,15 @@ class EpisodeActivity : AppCompatActivity() {
                     premiereTextView.text =
                         instant.atZone(ZoneId.of("UTC"))
                             .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                    directedByTextView.text = episode.directedBy
-                    writtenByTextView.text = episode.writtenBy
                     watchedSwitch.isChecked = episode.watched
+                    episodeNumberTextView.text = getString(
+                        R.string.episode_se,
+                        episode.season.toString().padStart(2, '0'),
+                        episode.episode.toString().padStart(2, '0')
+                    )
+                    plotTextView.text = episode.plot
                     episodeIdTextView.text = episode.id.toString()
-                    prevButton.isEnabled = episode.id != 1u
+                    prevButton.isEnabled = episode.id != 1u.toUShort()
                 }
             }, e = { e ->
                 loading(false)
@@ -84,18 +85,17 @@ class EpisodeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_episode)
 
         watchedSwitch = findViewById(R.id.watchedSwitch)
-        detailsButton = findViewById(R.id.plotButton)
         prevButton = findViewById(R.id.prevButton)
         nextButton = findViewById(R.id.nextButton)
         progressBar = findViewById(R.id.progressBar)
 
         titleTextView = findViewById(R.id.titleTextView)
         premiereTextView = findViewById(R.id.premiereTextView)
-        directedByTextView = findViewById(R.id.directedByTextView)
-        writtenByTextView = findViewById(R.id.writtenByTextView)
+        episodeNumberTextView = findViewById(R.id.episodeNumberTextView)
+        plotTextView = findViewById(R.id.plotTextView)
         episodeIdTextView = findViewById(R.id.episodeIdTextView)
 
-        updateView(intent.getIntExtra(EPISODE_ID, 0).toUInt(), progressBar)
+        updateView(intent.getIntExtra(EPISODE_ID, 0).toUShort(), progressBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -109,13 +109,13 @@ class EpisodeActivity : AppCompatActivity() {
 
     fun nextEpisode(view: View) {
         val id = episode?.id ?: return
-        updateView(id + 1u, view)
+        updateView((id + 1u).toUShort(), view)
     }
 
     fun prevEpisode(view: View) {
         val id = episode?.id ?: return
-        if (id == 1u) return
-        updateView(id - 1u, view)
+        if (id == 1u.toUShort()) return
+        updateView((id - 1u).toUShort(), view)
     }
 
     fun markEpisode(view: View) {
@@ -140,18 +140,5 @@ class EpisodeActivity : AppCompatActivity() {
             ErrorUtil.showSnackbar(e, view)
         }
 
-    }
-
-    fun showPlot(view: View) {
-        val episode = episode
-        val plot = episode?.plot
-        if (plot.isNullOrEmpty() || plot == "N/A") {
-            ErrorUtil.showSnackbar(UserException(ErrorType.NO_PLOT), view)
-            return
-        }
-        val intent = Intent(this, PlotActivity::class.java)
-        intent.putExtra(PlotActivity.PLOT, plot)
-        intent.putExtra(PlotActivity.TITLE, episode.title)
-        startActivity(intent)
     }
 }

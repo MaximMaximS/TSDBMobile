@@ -4,8 +4,6 @@
     <string name="settings">Settings</string>
     <string name="description">Keep track of your watched episodes!</string>
     <string name="api_settings">API Settings</string>
-    <string name="api_language">Language</string>
-    <string name="api_default_language">en</string>
     <string name="api_address">API Address</string>
     <string name="title_activity_settings">Settings</string>
     <string name="username">Username</string>
@@ -34,7 +32,6 @@
     <string name="watched">Watched:</string>
     <string name="watched_on">Yes ✔️</string>
     <string name="watched_off">No ❌</string>
-    <string name="view_plot">Plot</string>
 
     <string name="code_400">Invalid request</string>
     <string name="code_401">Invalid credentials</string>
@@ -45,7 +42,7 @@
     <string name="code_unknown">Unhandled response code</string>
 
     <string name="not_logged_in">Please log in first</string>
-    <string name="api_fail">Failed to connect to API</string>
+    <string name="request_failed">Request has failed</string>
     <string name="invalid_url">Invalid URL</string>
     <string name="failed_to_parse">Failed to parse response</string>
     <string name="no_episodes_found">No episodes found</string>
@@ -54,16 +51,6 @@
     <string name="empty_title">Please type episode title</string>
     <string name="empty_se">Please type season and episode number</string>
     <string name="no_plot">Plot not available</string>
-
-    <string name="example">Rodina je na projížďce autem s novým satelitním rádiem. Najednou jim do cesty vjede Bohatý Texasan. Homer mu začne z okénka auta hrozit pomstou s baseballovou pálkou v ruce. Marge se mu ale snaží domluvit, že pomsta není žádným řešením, a vypráví mu příběh jménem Hrabě Monte-Špeko (parodie na román Hrabě Monte Cristo)
-
-Příběh se odehrává se Francii. Homer s Marge mají 2 děti – Barta a Lízu. Jsou bohatí a Vočko Homerovi závidí, tak jeho jménem vytvoří dokument, kvůli kterému je Homer odsouzen za vlastizradu. Ve vězení dělají Lenny a Carl ostrahu. Homer má spoluvězně – Burnse. Ten mu prozradí, že už 30 let kope tunel z vězení, a navíc mu dá mapu pokladu. Homer pomocí tunelu uteče a 5 let plánuje pomstu. Celé město je pozváno do jeho zámku, kde na Vočkovi vykoná svou pomstu. Pak ale zjistí, že Marge a děti měly Vočka rádi. Poučení zní, že pomsta plodí jen neštěstí. Homer v autě ale Marge vůbec neposlouchal.
-
-Druhý příběh o pomstě vypráví Líza. Jmenuje se Pomsta šprtů (parodie na film Pomsta šprtů z roku 1984). Martin Prince sestrojí Vendetátor – rukavici schopnou pomsty. Milhouse si ji vezme a začne se jejich tyranům mstít. Později se ale začne mstít úplně všem ve škole i úplně novým žákům. Líze ale ublížit nedokáže a rukavici zahodí. Pak si ji vezme Nelson. Poučení z toho příběhu zní, že pokud se někdo mstí, stane se stejně zlým jako ten komu se mstí.
-
-Homer konečně dožene Texasana, ale ještě začne svůj příběh vyprávět Bart. Jmenuje se Bartman začíná (parodie na film Batman začíná). Bartovy rodiče zabil zloduch Haďák. Homer z posledních sil chce po Bartovi pomstít svou smrt. Děda Simpson mu pomůže s výcvikem. Bart začne chytat zloduchy po celém městě, ale stále nemůže najít muže, který zavraždil jeho rodiče. Ten se pokusí vykrást muzeum a tam se mu pomstí. Napíchne ho na hadí zuby.
-
-Mezitím si Homer a Texasan popovídali a zjistili, že mají hodně společného, a usmířili se. Závěrečné titulky začínají slovy: „Věnováno všem, kteří zahynuli ve Hvězdných válkách“. Následuje výčet jmen. </string>
-
     <string name="unknown_error">Unknown error</string>
+    <string name="episode_se">S%1$sE%2$s</string>
 </resources>
